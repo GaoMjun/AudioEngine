@@ -13,7 +13,7 @@ import io.github.gaomjun.recorder.AudioEngine;
 
 public class MainActivity extends Activity {
 
-    private AudioEngine audioEngine = new AudioEngine();
+    private AudioEngine audioEngine = new AudioEngine(true);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,9 +21,8 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         audioEngine.setSaveToFile(true);
-        audioEngine.setPcmDataListener(new PCMDataListener());
-//        audioEngine.setAacDataListener(new AACDataListener());
-//        audioEngine.setEncoding(true);
+//        audioEngine.setPcmDataListener(new PCMDataListener());
+        audioEngine.setAacDataListener(new AACDataListener());
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -66,8 +65,8 @@ public class MainActivity extends Activity {
 
         @Override
         public void onAACData(@NotNull ByteBuffer byteBuffer, @NotNull MediaCodec.BufferInfo info) {
-            byte[] aacData = new byte[info.size];
-            byteBuffer.get(aacData);
+//            byte[] aacData = new byte[info.size];
+//            byteBuffer.get(aacData);
 
             System.out.println("onAACData " + info.size + " " + info.presentationTimeUs);
         }

@@ -22,7 +22,7 @@ class AACEncoder : PCMCapture.PCMDataCallback {
     private var aacEncodingThread: HandlerThread? = null
     private var aacEncodingHandler: Handler? = null
 
-    private val pcmCapture = PCMCapture()
+    private var pcmCapture: PCMCapture? = null
 
     var audioFormatChanged: ((format: MediaFormat) -> Unit)? = null
     var audioFormat: MediaFormat? = null
@@ -35,9 +35,13 @@ class AACEncoder : PCMCapture.PCMDataCallback {
     private var BITRATE = 192000
     private var MAX_INPUT_SIZE = 14208
 
-    constructor()
+    constructor() {
+        pcmCapture = PCMCapture()
+    }
 
     constructor(audioConfiguration: AudioConfiguration) {
+        pcmCapture = PCMCapture(audioConfiguration)
+
         SAMPLE_RATE = audioConfiguration.SAMPLE_RATE
         CHANNELS = audioConfiguration.CHANNEL_NUM
         BITRATE = audioConfiguration.BITRATE
@@ -75,13 +79,14 @@ class AACEncoder : PCMCapture.PCMDataCallback {
         aacEncodingThread?.start()
         aacEncodingHandler = Handler(aacEncodingThread?.looper)
 
-        pcmCapture.pcmDataCallback = this
-        pcmCapture.start()
+        pcmCapture?.savePCMToFile = saveAACToFile
+        pcmCapture?.pcmDataCallback = this
+        pcmCapture?.start()
     }
 
     fun stop() {
-        pcmCapture.pcmDataCallback = null
-        pcmCapture.stop()
+        pcmCapture?.pcmDataCallback = null
+        pcmCapture?.stop()
 
         if (aacEncodingThread != null) {
             val moribund = aacEncodingThread
@@ -151,7 +156,7 @@ class AACEncoder : PCMCapture.PCMDataCallback {
     }
 
     override fun onPCMData(data: ByteArray, size: Int, timestamp: Long) {
-//        println("onPCMData $size")
+        println("onPCMData $size")
 
         aacEncodingHandler?.post(AACEncodingRunnable(data, size, timestamp))
     }

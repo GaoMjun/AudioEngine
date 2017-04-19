@@ -10,28 +10,37 @@ class AudioEngine : PCMCapture.PCMDataCallback, AACEncoder.AACDataCallback {
     private var pcmCapture: PCMCapture? = null
     private var aacEncoder: AACEncoder? = null
 
-    var encoding = false
+    private var encoding = false
 
     var saveToFile = false
 
-    constructor() {
-        pcmCapture = PCMCapture()
-        aacEncoder = AACEncoder()
+    constructor(encoding: Boolean = false) {
+        this.encoding = encoding
+
+        if (encoding) {
+            aacEncoder = AACEncoder()
+        } else {
+            pcmCapture = PCMCapture()
+        }
     }
 
-    constructor(audioConfiguration: AudioConfiguration) {
-        pcmCapture = PCMCapture(audioConfiguration)
-        aacEncoder = AACEncoder(audioConfiguration)
+    constructor(encoding: Boolean = false, audioConfiguration: AudioConfiguration) {
+        this.encoding = encoding
+
+        if (encoding) {
+            aacEncoder = AACEncoder(audioConfiguration)
+        } else {
+            pcmCapture = PCMCapture(audioConfiguration)
+        }
     }
 
     fun start() {
-        pcmCapture?.savePCMToFile = saveToFile
-        aacEncoder?.saveAACToFile = saveToFile
-
         if (encoding) {
+            aacEncoder?.saveAACToFile = saveToFile
             aacEncoder?.aacDataCallback = this
             aacEncoder?.start()
         } else {
+            pcmCapture?.savePCMToFile = saveToFile
             pcmCapture?.pcmDataCallback = this
             pcmCapture?.start()
         }
