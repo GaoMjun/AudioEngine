@@ -25,7 +25,9 @@ class AudioEngine : PCMCapture.PCMDataCallback, AACEncoder.AACDataCallback {
     }
 
     fun start() {
-        pcmCapture?.saveToFile = saveToFile
+        pcmCapture?.savePCMToFile = saveToFile
+        aacEncoder?.saveAACToFile = saveToFile
+
         if (encoding) {
             aacEncoder?.aacDataCallback = this
             aacEncoder?.start()

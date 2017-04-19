@@ -27,7 +27,7 @@ class AACEncoder : PCMCapture.PCMDataCallback {
     var audioFormatChanged: ((format: MediaFormat) -> Unit)? = null
     var audioFormat: MediaFormat? = null
 
-    private var saveToFile = false
+    var saveAACToFile = false
     private var bufferedOutputStream: BufferedOutputStream? = null
 
     private var SAMPLE_RATE = 44100
@@ -129,7 +129,7 @@ class AACEncoder : PCMCapture.PCMDataCallback {
                 val aacDataBuffer = codec?.getOutputBuffer(outputBufferIndex)!!
                 aacDataCallback?.onAACData(aacDataBuffer, bufferInfo)
 
-                if (saveToFile) {
+                if (saveAACToFile) {
                     if (bufferedOutputStream == null) {
                         val f = File(Environment.getExternalStorageDirectory(), "DCIM/Camera/audio.aac")
                         if (f.exists()) {
