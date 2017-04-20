@@ -6,7 +6,7 @@ import java.nio.ByteBuffer
 /**
  * Created by qq on 14/4/2017.
  */
-class AudioEngine : PCMCapture.PCMDataCallback, AACEncoder.AACDataCallback {
+class AudioEngine : PCMCapture.PCMDataCallback, AACEncoder.AudioDataListener {
     private var pcmCapture: PCMCapture? = null
     private var aacEncoder: AACEncoder? = null
 
@@ -37,7 +37,7 @@ class AudioEngine : PCMCapture.PCMDataCallback, AACEncoder.AACDataCallback {
     fun start() {
         if (encoding) {
             aacEncoder?.saveAACToFile = saveToFile
-            aacEncoder?.aacDataCallback = this
+            aacEncoder?.audioDataListener = this
             aacEncoder?.start()
         } else {
             pcmCapture?.savePCMToFile = saveToFile
@@ -58,10 +58,12 @@ class AudioEngine : PCMCapture.PCMDataCallback, AACEncoder.AACDataCallback {
 
     override fun onPCMData(data: ByteArray, size: Int, timestamp: Long) {
         pcmDataListener?.onPCMData(data, size, timestamp)
+        audioDataListener?.onPCMData(data, size, timestamp)
     }
 
     override fun onAACData(byteBuffer: ByteBuffer, info: MediaCodec.BufferInfo) {
         aacDataListener?.onAACData(byteBuffer, info)
+        audioDataListener?.onAACData(byteBuffer, info)
     }
 
     interface PCMDataListener {
@@ -75,4 +77,11 @@ class AudioEngine : PCMCapture.PCMDataCallback, AACEncoder.AACDataCallback {
     }
 
     var aacDataListener: AACDataListener? = null
+
+    interface AudioDataListener {
+        fun onPCMData(data: ByteArray, size: Int, timestamp: Long) {}
+        fun onAACData(byteBuffer: ByteBuffer, info: MediaCodec.BufferInfo) {}
+    }
+
+    var audioDataListener: AudioDataListener? = null
 }
