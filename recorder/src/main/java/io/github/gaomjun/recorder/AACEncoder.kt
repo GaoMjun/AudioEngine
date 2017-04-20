@@ -95,12 +95,6 @@ class AACEncoder : PCMCapture.PCMDataCallback {
         }
     }
 
-    interface AACDataCallback {
-        fun onAACData(byteBuffer: ByteBuffer, info: MediaCodec.BufferInfo)
-    }
-
-    var aacDataCallback: AACDataCallback? = null
-
     interface AudioDataListener {
         fun onPCMData(data: ByteArray, size: Int, timestamp: Long) {}
         fun onAACData(byteBuffer: ByteBuffer, info: MediaCodec.BufferInfo) {}
@@ -129,17 +123,8 @@ class AACEncoder : PCMCapture.PCMDataCallback {
                 audioFormatChanged?.invoke(audioFormat!!)
             }
             if (outputBufferIndex!! >= 0) {
-//                println("AACEncodingRunnable " + bufferInfo.size)
-
-//                println("audio timestap ${bufferInfo.presentationTimeUs}")
-//                if (ptsStart < 0) {
-//                    // start pts
-//                    ptsStart = timestamp
-//                }
-//                val pts = timestamp - ptsStart
                 bufferInfo.presentationTimeUs = timestamp
                 val aacDataBuffer = codec?.getOutputBuffer(outputBufferIndex)!!
-                aacDataCallback?.onAACData(aacDataBuffer, bufferInfo)
                 audioDataListener?.onAACData(aacDataBuffer, bufferInfo)
 
                 if (saveAACToFile) {

@@ -48,7 +48,7 @@ class AudioEngine : PCMCapture.PCMDataCallback, AACEncoder.AudioDataListener {
 
     fun stop() {
         if (encoding) {
-            aacEncoder?.aacDataCallback = null
+            aacEncoder?.audioDataListener = null
             aacEncoder?.stop()
         } else {
             pcmCapture?.pcmDataCallback = null
@@ -57,26 +57,13 @@ class AudioEngine : PCMCapture.PCMDataCallback, AACEncoder.AudioDataListener {
     }
 
     override fun onPCMData(data: ByteArray, size: Int, timestamp: Long) {
-//        pcmDataListener?.onPCMData(data, size, timestamp)
         audioDataListener?.onPCMData(data, size, timestamp)
     }
 
     override fun onAACData(byteBuffer: ByteBuffer, info: MediaCodec.BufferInfo) {
-//        aacDataListener?.onAACData(byteBuffer, info)
         audioDataListener?.onAACData(byteBuffer, info)
     }
 
-//    interface PCMDataListener {
-//        fun onPCMData(data: ByteArray, size: Int, timestamp: Long)
-//    }
-//
-//    var pcmDataListener: PCMDataListener? = null
-//
-//    interface AACDataListener {
-//        fun onAACData(byteBuffer: ByteBuffer, info: MediaCodec.BufferInfo)
-//    }
-//
-//    var aacDataListener: AACDataListener? = null
 
     interface AudioDataListener {
         fun onPCMData(data: ByteArray, size: Int, timestamp: Long) {}

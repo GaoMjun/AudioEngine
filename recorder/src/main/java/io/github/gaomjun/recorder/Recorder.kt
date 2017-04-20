@@ -15,7 +15,7 @@ import java.nio.ByteBuffer
 /**
  * Created by qq on 7/3/2017.
  */
-class Recorder : AACEncoder.AACDataCallback {
+class Recorder : AACEncoder.AudioDataListener {
 
     private var recorderThread: HandlerThread? = null
     private var recorderThreadHandler: RecorderThreadHandler? = null
@@ -177,7 +177,7 @@ class Recorder : AACEncoder.AACDataCallback {
         mediaMuxer?.start()
         recording = true
 
-        aacEncoder.aacDataCallback = this
+        aacEncoder.audioDataListener = this
     }
 
     override fun onAACData(byteBuffer: ByteBuffer, info: MediaCodec.BufferInfo) {
