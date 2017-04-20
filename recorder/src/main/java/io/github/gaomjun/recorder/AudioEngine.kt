@@ -57,26 +57,26 @@ class AudioEngine : PCMCapture.PCMDataCallback, AACEncoder.AudioDataListener {
     }
 
     override fun onPCMData(data: ByteArray, size: Int, timestamp: Long) {
-        pcmDataListener?.onPCMData(data, size, timestamp)
+//        pcmDataListener?.onPCMData(data, size, timestamp)
         audioDataListener?.onPCMData(data, size, timestamp)
     }
 
     override fun onAACData(byteBuffer: ByteBuffer, info: MediaCodec.BufferInfo) {
-        aacDataListener?.onAACData(byteBuffer, info)
+//        aacDataListener?.onAACData(byteBuffer, info)
         audioDataListener?.onAACData(byteBuffer, info)
     }
 
-    interface PCMDataListener {
-        fun onPCMData(data: ByteArray, size: Int, timestamp: Long)
-    }
-
-    var pcmDataListener: PCMDataListener? = null
-
-    interface AACDataListener {
-        fun onAACData(byteBuffer: ByteBuffer, info: MediaCodec.BufferInfo)
-    }
-
-    var aacDataListener: AACDataListener? = null
+//    interface PCMDataListener {
+//        fun onPCMData(data: ByteArray, size: Int, timestamp: Long)
+//    }
+//
+//    var pcmDataListener: PCMDataListener? = null
+//
+//    interface AACDataListener {
+//        fun onAACData(byteBuffer: ByteBuffer, info: MediaCodec.BufferInfo)
+//    }
+//
+//    var aacDataListener: AACDataListener? = null
 
     interface AudioDataListener {
         fun onPCMData(data: ByteArray, size: Int, timestamp: Long) {}

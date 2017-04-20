@@ -4,6 +4,7 @@ import android.app.Activity
 import android.media.MediaCodec
 import android.os.Bundle
 import android.os.Handler
+import io.github.gaomjun.extensions.postDelayedR
 
 import java.nio.ByteBuffer
 
@@ -20,9 +21,13 @@ class MainActivity : Activity(), AudioEngine.AudioDataListener {
 //        audioEngine.saveToFile = true
         audioEngine.audioDataListener = this
 
-        Handler().postDelayed({ audioEngine.start() }, 2000)
+        Handler().postDelayedR(2000) {
+            audioEngine.start()
+        }
 
-        Handler().postDelayed({ audioEngine.stop() }, 10000)
+        Handler().postDelayedR(10000) {
+            audioEngine.stop()
+        }
 
     }
 

@@ -17,7 +17,7 @@ import java.nio.ByteBuffer
  */
 class Recorder : AACEncoder.AACDataCallback {
 
-    private var recorderThead: HandlerThread? = null
+    private var recorderThread: HandlerThread? = null
     private var recorderThreadHandler: RecorderThreadHandler? = null
 
     private var mediaMuxer: MediaMuxer? = null
@@ -33,9 +33,9 @@ class Recorder : AACEncoder.AACDataCallback {
     private val aacEncoder = AACEncoder()
 
     init {
-        recorderThead = HandlerThread("recorderThead")
-        recorderThead?.start()
-        recorderThreadHandler = RecorderThreadHandler(recorderThead?.looper)
+        recorderThread = HandlerThread("recorderThread")
+        recorderThread?.start()
+        recorderThreadHandler = RecorderThreadHandler(recorderThread?.looper)
     }
 
     private var path: String? = null
